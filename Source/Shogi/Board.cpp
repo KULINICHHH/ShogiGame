@@ -3,14 +3,18 @@
 
 #include "Board.h"
 
-ABoard* ABoard::BoardInstance = nullptr;
+ABoard* ABoard::BoardInstance;
 
-ABoard* ABoard::GetInstance()
+ABoard* ABoard::GetInstance(UWorld* World)
 {
-    if (BoardInstance == nullptr) {
-        UWorld* World = GEngine->GetWorld();
-        BoardInstance = World->SpawnActor<ABoard>();
+    if (BoardInstance != nullptr) {
+
         UE_LOG(LogTemp, Warning, TEXT("Hello"));
+        BoardInstance = NewObject<ABoard>();
+        if (World) {
+            BoardInstance = World->SpawnActor<ABoard>();
+            UE_LOG(LogTemp, Warning, TEXT("Hello"));
+        }
     }
     return BoardInstance;
 }
@@ -19,12 +23,7 @@ ABoard* ABoard::GetInstance()
 ABoard::ABoard()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = true;
-
-    // Set up the actor's initialization params
-    SetActorLocation(FVector(-40.f, -10.f, 0.f)); // Set initial location
-    SetActorRotation(FRotator(0.f, 0.f, 0.f)); // Set initial rotation
-    SetActorScale3D(FVector(4.f, 4.f, 0.5f)); // Set initial scale
+    PrimaryActorTick.bCanEverTick = false;
 
     // Add components to the actor
     UStaticMeshComponent* MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -42,13 +41,20 @@ ABoard::ABoard()
         MeshComponent->SetMaterial(0, MaterialAsset.Object);
     }
 
+    // Set up the actor's initialization params
+    SetActorLocation(FVector(-40.f, -10.f, 0.f)); // Set initial location
+    SetActorRotation(FRotator(0.f, 0.f, 0.f)); // Set initial rotation
+    SetActorScale3D(FVector(4.f, 4.f, 0.5f)); // Set initial scale
 }
 
 // Called when the game starts or when spawned
 void ABoard::BeginPlay()
 {
     Super::BeginPlay();
-    //ABoard* BoardInstance = GetInstance();
+
+    //UWorld* World = GetWorld();
+
+    //BoardInstance = ABoard::GetInstance(World);
 }
 
 // Called every frame

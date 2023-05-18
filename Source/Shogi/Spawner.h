@@ -3,33 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/ConstructorHelpers.h"
-#include "Materials/MaterialInterface.h"
-#include "Components/StaticMeshComponent.h"
-#include "Engine/World.h"
+#include "Board.h"
 #include "GameFramework/Actor.h"
-#include "Board.generated.h"
+#include "Spawner.generated.h"
 
 UCLASS()
-class SHOGI_API ABoard : public AActor
+class SHOGI_API ASpawner : public AActor
 {
 	GENERATED_BODY()
-
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
-	ABoard();
-	UFUNCTION(BlueprintCallable, Category = "Board")
-	static ABoard* GetInstance(UWorld* World);
+	ASpawner();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-private:
-	static ABoard* BoardInstance;
 };
