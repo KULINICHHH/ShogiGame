@@ -3,11 +3,11 @@
 
 #include "Board.h"
 
-ABoard* ABoard::BoardInstance;
+ABoard* ABoard::BoardInstance = nullptr;
 
 ABoard* ABoard::GetInstance(UWorld* World)
 {
-    if (BoardInstance != nullptr) {
+    if (BoardInstance == nullptr) {
 
         UE_LOG(LogTemp, Warning, TEXT("Hello"));
         BoardInstance = NewObject<ABoard>();
@@ -23,7 +23,7 @@ ABoard* ABoard::GetInstance(UWorld* World)
 ABoard::ABoard()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = true;
 
     // Add components to the actor
     UStaticMeshComponent* MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -51,10 +51,14 @@ ABoard::ABoard()
 void ABoard::BeginPlay()
 {
     Super::BeginPlay();
+}
 
-    //UWorld* World = GetWorld();
+void ABoard::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Super::EndPlay(EndPlayReason);
 
-    //BoardInstance = ABoard::GetInstance(World);
+    // Reset the BoardInstance
+    BoardInstance = nullptr;
 }
 
 // Called every frame
